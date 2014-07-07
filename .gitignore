@@ -11,3 +11,13 @@
 *.lai
 *.la
 *.a
+
+# Game files and executables
+dx
+cg.npa
+nss.npa
+sound.npa
+system.npa
+voice.npa
+chaos-head
+*.exe
