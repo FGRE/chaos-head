@@ -21,14 +21,40 @@
 #include "inipafile.hpp"
 #include <thread>
 
-ResourceMgr* CreateResourceMgr(const std::vector<std::string>& AchieveFileNames, uint8_t GameID)
+static const char* ArchieveFileNames[] =
 {
-    std::vector<INpaFile*> Archives;
-    Archives.resize(AchieveFileNames.size());
-    for (uint32_t i = 0; i < AchieveFileNames.size(); ++i)
-        Archives[i] = new INipaFile(AchieveFileNames[i], GameID);
-    return new ResourceMgr(Archives);
-}
+    "cg.npa",
+    "nss.npa",
+    "voice.npa",
+    "sound.npa",
+    nullptr
+};
+
+class CHResourceMgr : public ResourceMgr
+{
+public:
+    CHResourceMgr(uint8_t GameID)
+    {
+        Archives.resize(sizeof(ArchieveFileNames) / sizeof(const char*));
+        for (uint32_t i = 0; ArchieveFileNames[i]; ++i)
+            Archives[i] = new INipaFile(ArchieveFileNames[i], GameID);
+        assert(!Archives.empty());
+    }
+
+protected:
+    ScriptFile* ReadScriptFile(const std::string& Path)
+    {
+        ScriptFile* pScript = nullptr;
+        uint32_t NssSize;
+        char* NssData = Read(Path, NssSize);
+
+        if (NssData)
+            pScript = new ScriptFile(Path, NssData, NssSize);
+
+        delete[] NssData;
+        return pScript;
+    }
+};
 
 class CHInterpreter : public NsbInterpreter
 {
@@ -36,7 +62,7 @@ public:
     CHInterpreter(uint8_t GameID)
     {
         NpaFile::SetLocale("ja_JP.CP932");
-        sResourceMgr = CreateResourceMgr({"cg.npa", "nss.npa", "voice.npa", "sound.npa"}, GameID);
+        sResourceMgr = new CHResourceMgr(GameID);
     }
 
     ~CHInterpreter()
