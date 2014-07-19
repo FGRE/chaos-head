@@ -80,7 +80,7 @@ public:
     void Main()
     {
         Start();
-        ExecuteScript("nss/boot.nss");
+        ExecuteScript("boot.nss");
     }
 
 private:
