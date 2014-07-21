@@ -49,7 +49,10 @@ protected:
         char* NssData = Read(Path, NssSize);
 
         if (NssData)
-            pScript = new ScriptFile(Path, NssData, NssSize);
+        {
+            string Utf8Data = NpaFile::ToUtf8(NssData, NssSize);
+            pScript = new ScriptFile(Path, Utf8Data.c_str(), Utf8Data.size());
+        }
 
         delete[] NssData;
         return pScript;
