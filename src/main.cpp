@@ -41,6 +41,14 @@ public:
         assert(!Archives.empty());
     }
 
+    // TODO: This is a hackfix to skip prefix like cg/ or nss/
+    char* Read(std::string Path, uint32_t& Size)
+    {
+        int i = 0;
+        while (Path[i++] != '/');
+        return ResourceMgr::Read(Path.substr(i), Size);
+    }
+
 protected:
     ScriptFile* ReadScriptFile(const std::string& Path)
     {
@@ -83,7 +91,7 @@ public:
     void Main()
     {
         Start();
-        ExecuteScript("boot.nss");
+        ExecuteScript("nss/boot.nss");
     }
 
 private:
