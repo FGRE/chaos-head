@@ -44,8 +44,13 @@ public:
     // TODO: This is a hackfix to skip prefix like cg/ or nss/
     char* Read(std::string Path, uint32_t& Size)
     {
-        size_t i = Path.find('/') + 1;
-        return ResourceMgr::Read(Path.substr(i), Size);
+        return ResourceMgr::Read(Path.substr(Path.find('/') + 1), Size);
+    }
+
+    // TODO: Also a hackfix
+    Resource GetResource(std::string Path)
+    {
+        return ResourceMgr::GetResource(Path.substr(Path.find('/') + 1));
     }
 
 protected:
