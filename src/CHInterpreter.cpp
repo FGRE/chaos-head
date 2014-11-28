@@ -15,23 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
+#include "CHInterpreter.hpp"
 #include "CHWindow.hpp"
-#include "inipafile.hpp"
+#include "CHResourceMgr.hpp"
 
-int main(int argc, char** argv)
+CHInterpreter::CHInterpreter(CHWindow* pWindow, uint8_t GameID) : NSBInterpreter(pWindow)
 {
-    uint8_t GameID = INipaFile::CHAOSHEAD;
+    NpaFile::SetLocale("ja_JP.CP932");
+    sResourceMgr = new CHResourceMgr(GameID);
+}
 
-    if (argc == 2)
-    {
-        GameID = INipaFile::GameStringToID(argv[2]);
-        if (GameID == -1)
-        {
-            std::cout << "Invalid game specified." << std::endl;
-            return 1;
-        }
-    }
-
-    unique_ptr<CHWindow> pWindow(new CHWindow(GameID));
-    pWindow->Run();
+CHInterpreter::~CHInterpreter()
+{
+    delete sResourceMgr;
 }

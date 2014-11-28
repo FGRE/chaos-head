@@ -16,22 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 #include "CHWindow.hpp"
-#include "inipafile.hpp"
+#include "CHInterpreter.hpp"
 
-int main(int argc, char** argv)
+CHWindow::CHWindow(uint8_t GameID) : Window("FGRE: Chaos;Head", 800, 600)
 {
-    uint8_t GameID = INipaFile::CHAOSHEAD;
-
-    if (argc == 2)
-    {
-        GameID = INipaFile::GameStringToID(argv[2]);
-        if (GameID == -1)
-        {
-            std::cout << "Invalid game specified." << std::endl;
-            return 1;
-        }
-    }
-
-    unique_ptr<CHWindow> pWindow(new CHWindow(GameID));
-    pWindow->Run();
+    pInterpreter = new CHInterpreter(this, GameID);
+    pInterpreter->ExecuteScript("nss/boot.nss");
 }

@@ -15,23 +15,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include "CHWindow.hpp"
-#include "inipafile.hpp"
+#ifndef CH_WINDOW_HPP
+#define CH_WINDOW_HPP
+ 
+#include "Window.hpp"
 
-int main(int argc, char** argv)
+class CHWindow : public Window
 {
-    uint8_t GameID = INipaFile::CHAOSHEAD;
+public:
+    CHWindow(uint8_t GameID);
+};
 
-    if (argc == 2)
-    {
-        GameID = INipaFile::GameStringToID(argv[2]);
-        if (GameID == -1)
-        {
-            std::cout << "Invalid game specified." << std::endl;
-            return 1;
-        }
-    }
-
-    unique_ptr<CHWindow> pWindow(new CHWindow(GameID));
-    pWindow->Run();
-}
+#endif

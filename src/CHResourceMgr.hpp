@@ -15,23 +15,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include "CHWindow.hpp"
-#include "inipafile.hpp"
+#ifndef CH_RESOURCE_MGR_HPP
+#define CH_RESOURCE_MGR_HPP
 
-int main(int argc, char** argv)
+#include "ResourceMgr.hpp"
+
+class CHResourceMgr : public ResourceMgr
 {
-    uint8_t GameID = INipaFile::CHAOSHEAD;
+public:
+    CHResourceMgr(uint8_t GameID);
 
-    if (argc == 2)
-    {
-        GameID = INipaFile::GameStringToID(argv[2]);
-        if (GameID == -1)
-        {
-            std::cout << "Invalid game specified." << std::endl;
-            return 1;
-        }
-    }
+    char* Read(std::string Path, uint32_t& Size);
+    Resource GetResource(std::string Path);
 
-    unique_ptr<CHWindow> pWindow(new CHWindow(GameID));
-    pWindow->Run();
-}
+protected:
+    ScriptFile* ReadScriptFile(const std::string& Path);
+};
+
+#endif
