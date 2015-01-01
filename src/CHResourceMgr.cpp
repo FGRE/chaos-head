@@ -58,8 +58,8 @@ ScriptFile* CHResourceMgr::ReadScriptFile(const std::string& Path)
     {
         string Utf8Data = NpaFile::ToUtf8(NssData, NssSize);
         pScript = new ScriptFile(Path, Utf8Data.c_str(), Utf8Data.size());
+        delete[] NssData;
     }
 
-    delete[] NssData;
     return pScript;
 }
